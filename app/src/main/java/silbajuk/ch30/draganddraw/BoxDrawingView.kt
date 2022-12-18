@@ -1,6 +1,8 @@
 package silbajuk.ch30.draganddraw
 
 import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.graphics.PointF
 import android.util.AttributeSet
 import android.util.Log
@@ -14,6 +16,13 @@ class BoxDrawingView(context: Context, attrs: AttributeSet? = null) : View(conte
 
     private var currentBox: Box? = null
     private val boxen = mutableListOf<Box>()
+
+    private val boxPaint = Paint().apply{
+        color = 0x22ff0000.toInt()
+    }
+    private val backgroundPaint = Paint().apply{
+        color = 0xfff8efe0.toInt()
+    }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val current = PointF(event.x, event.y)
@@ -48,6 +57,15 @@ class BoxDrawingView(context: Context, attrs: AttributeSet? = null) : View(conte
         currentBox?.let{
             it.end = current
             invalidate()
+        }
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        //배경 채우기
+        canvas.drawPaint(backgroundPaint)
+
+        boxen.forEach{box ->
+            canvas.drawRect(box.left, box.right, box.bottom, box.top, boxPaint)
         }
     }
 }
